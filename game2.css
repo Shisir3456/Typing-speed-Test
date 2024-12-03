@@ -1,0 +1,250 @@
+/* General Body Styling */
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(45deg, #0b0c10, #1f2833); /* Dark modern gradient */
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+}
+
+/* Game Container */
+#game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+/* Words Style */
+.word {
+  position: absolute;
+  font-size: 30px;
+  color: #fff;
+  transition: transform 0.3s ease-out;
+  font-family: 'Courier New', monospace;
+  text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8); /* Glow effect */
+  animation: wordMove 1s ease-out infinite;
+}
+
+@keyframes wordMove {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+}
+
+/* Explosion Effect */
+.explosion {
+  position: absolute;
+  font-size: 50px;
+  color: #ff0;
+  animation: explode 0.5s ease-out forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Light Effect */
+.light-effect {
+  position: absolute;
+  background: rgba(255, 255, 0, 0.6);
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: lightAnimation 0.5s ease-out forwards;
+}
+
+@keyframes lightAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(5);
+    opacity: 0;
+  }
+}
+
+/* Score and Health */
+#score, #health {
+  position: fixed;
+  top: 20px;
+  font-size: 20px;
+  z-index: 100;
+}
+
+#score {
+  left: 20px;
+  color: #00ff00;
+}
+
+#health {
+  right: 20px;
+  color: #ff0000;
+}
+
+/* Start Button */
+.start-btn {
+  position: absolute;
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.start-btn:hover {
+  background-color: #008c9e;
+  transform: scale(1.1);
+}
+
+/* Responsive Design */
+
+/* Small Devices (Phones) */
+@media (max-width: 600px) {
+  .word {
+    font-size: 20px;
+  }
+
+  .explosion {
+    font-size: 40px;
+  }
+
+  .light-effect {
+    width: 80px;
+    height: 80px;
+  }
+
+  #score, #health {
+    font-size: 16px;
+  }
+
+  .start-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+}
+
+/* Medium Devices (Tablets) */
+@media (max-width: 1024px) {
+  .word {
+    font-size: 25px;
+  }
+
+  .explosion {
+    font-size: 45px;
+  }
+
+  .light-effect {
+    width: 90px;
+    height: 90px;
+  }
+
+  #score, #health {
+    font-size: 18px;
+  }
+
+  .start-btn {
+    padding: 12px 25px;
+    font-size: 18px;
+  }
+}
+
+
+
+
+#keyboard-warning {
+  color: #AE445A;
+  font-size: 1.2em;
+  font-family: 'Poppins';
+  text-align: center;
+  margin-top: 160px;
+}
+
+
+
+
+#game-over-popup {
+  display: none; /* ডিফল্টভাবে হাইড থাকবে */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 300px;
+  background: #AE445A;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: white;
+  animation: popup-appear 0.3s ease-out forwards;
+}
+
+.popup-content h2 {
+  font-size: 1.8em;
+  margin-bottom: 10px;
+}
+
+.popup-content p {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+.restart-btn {
+  background-color: #00bcd4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.restart-btn:hover {
+  background-color: #008c9e;
+}
+
+@keyframes popup-appear {
+  from {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+

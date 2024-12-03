@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGenPC - Bangla Typing</title>
+    <link rel="stylesheet" href="bntyping.css"> <!-- Use relative path -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+     <header>
+  <div class="textContent">
+    <p><b>Typing Practice</b></p>
+    <p class="creator"><span>Husain Ahmed</span></p>
+  </div>
+</header>
+
+<style>
+  /* গুগল ফন্ট ইমপোর্ট */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  /* হেডার স্টাইল */
+  header {
+    text-align: center; /* সব কিছু মাঝখানে */
+    padding: 20px; /* কিছুটা জায়গা */
+    font-family: 'Poppins', sans-serif; /* ফন্ট সেটিং */
+  }
+
+  header .textContent p {
+    margin: 5px 0; /* টেক্সটের মাঝে ফাঁকা */
+  }
+
+  header .textContent p b {
+    font-size: 24px; /* টাইটেলের আকার */
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); /* গ্রেডিয়েন্ট রঙ */
+    -webkit-background-clip: text; /* ব্যাকগ্রাউন্ড ক্লিপিং */
+    -webkit-text-fill-color: transparent; /* টেক্সট স্বচ্ছ */
+    font-weight: 600; /* বোল্ড টেক্সট */
+  }
+
+  header .textContent .creator {
+    font-size: 14px; /* ক্রিয়েটরের লেখার আকার */
+    color: #6c63ff; /* নীল রঙ */
+    margin-top: 5px; /* উপরের লেখার সঙ্গে দূরত্ব */
+  }
+
+  header .textContent .creator span {
+    font-weight: bold; /* বোল্ড টেক্সট */
+    background: linear-gradient(90deg, #00c6ff, #0072ff); /* গ্রেডিয়েন্ট রঙ */
+    -webkit-background-clip: text; /* ব্যাকগ্রাউন্ড ক্লিপিং */
+    -webkit-text-fill-color: transparent; /* টেক্সট স্বচ্ছ */
+  }
+</style>
+
+    <section class="lesson-content">
+        <div class="container">
+            <!-- Typing practice tool -->
+            <div class="typing-tool">
+                <h3 id="typing-tool-title"></h3>
+                <div class="text-to-type">
+                    <p id="text-sample">আ</p> <!-- Initial display text will be "আ" -->
+                </div>
+                <textarea id="user-input" placeholder="Start typing here..."></textarea>
+                <div class="action-container">
+                    <button id="skip-button" class="skip-button">Skip</button>
+                    <!-- Checkboxes for Learn and Practice -->
+                    <div class="checkboxes" id="checkboxContainer">
+                        <label>
+                            <input type="checkbox" id="learn-checkbox" checked> Learn
+                        </label>
+                        <label>
+                            <input type="checkbox" id="practice-checkbox"> Practice
+                        </label>
+                    </div>
+                </div>
+                <aside class="dropdowns">
+                    <div class="language-selector">
+                        <select id="language-dropdown" onchange="handleLanguageChange()">
+                            <option value="bengali" selected>বাংলা</option>
+                            <option value="english">English</option>
+                        </select>
+                    </div>
+                    <div class="level-selector">
+                        <select id="level-dropdown">
+                            <option value="swarabarna">স্বরবর্ণ</option>
+                            <optgroup label="ব্যঞ্জন বর্ণ">
+                                <option value="ka-to-nga">ক-ঞ</option>
+                                <option value="tta-to-na">ট-ন</option>
+                                <option value="pa-to-sa">প- ঁ</option>
+                                <option value="ha-to-anuswar">ব্যঞ্জন বর্ণ</option>
+                            </optgroup>
+                            <option value="juktabarna">যুক্তবর্ণ</option>
+                            <option value="shobdo">শব্দ</option>
+                            <option value="bakko">বাক্য</option>
+                        </select>
+                    </div>
+                </aside>
+                <p id="result"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Include the necessary JavaScript files -->
+    <script src="consonent.js"></script> <!-- Link to consonent.js -->
+    <script src="bntyping.js"></script> <!-- Link to bntyping.js -->
+    <script src="checkboxes.js"></script> <!-- Link to checkboxes.js -->
+    <script src="word.js"></script> <!-- এখানে word.js -->
+
+    <script>
+
+
+        // Initialize variables
+        const textSample = document.getElementById('text-sample');
+        const userInput = document.getElementById('user-input');
+        const resultDisplay = document.getElementById('result');
+        const skipButton = document.getElementById('skip-button');
+        const levelDropdown = document.getElementById('level-dropdown');
+        const checkboxContainer = document.getElementById('checkboxContainer');
+
+        // Words array for "শব্দ" level
+        const words = [
+            "বাংলা", "বাংলাদেশ", "আমার", "তোমার", "বৃষ্টি", "সূর্য", "চাঁদ", "রাত", "দেওয়াল",
+            "গাছ", "ফুল", "পাখি", "মেঘ", "নদী", "সাগর", "ভালো", "মিষ্টি", "শান্তি", "স্বপ্ন", "বন্ধুত্ব", "কবি", "গান", "ছবি", "কথা", "আকাশ", "পাতা", "জল", "ভ্রমণ"
+        ];
+
+        // Sentences array for "বাক্য" level
+        const sentences = [
+            'আমি বাংলা লিখতে চাই।',
+            'তুমি কোথায় যাচ্ছো?',
+            'আজ আবহাওয়া খুব ভালো।',
+            'আমরা আগামীকাল সিনেমা দেখতে যাব।',
+            'তুমি কি আমাকে সাহায্য করতে পারবে?'
+        ];
+
+        let currentIndex = 0;
+
+        function updateWordSample() {
+            const selectedLevel = levelDropdown.value;
+
+            // If "শব্দ" level is selected
+            if (selectedLevel === 'shobdo') {
+                textSample.textContent = words[Math.floor(Math.random() * words.length)];
+            }
+
+            // If "বাক্য" level is selected
+            else if (selectedLevel === 'bakko') {
+                textSample.textContent = sentences[Math.floor(Math.random() * sentences.length)];
+            }
+        }
+
+        levelDropdown.addEventListener('change', () => {
+            currentIndex = 0; // Reset index to 0 whenever the level changes
+            updateWordSample(); // Update the sample text
+            toggleCheckboxes(); // Toggle checkbox visibility based on selected level
+        });
+
+        // Function to toggle checkbox visibility
+        function toggleCheckboxes() {
+            const selectedLevel = levelDropdown.value; // Get the selected level
+
+            if (selectedLevel === 'shobdo' || selectedLevel === 'bakko') {
+                checkboxContainer.style.display = 'none'; // Hide checkboxes
+            } else {
+                checkboxContainer.style.display = 'block'; // Show checkboxes
+            }
+        }
+
+        // Check user input and skip automatically if correct
+        function checkUserInput() {
+            const textToType = textSample.textContent;
+
+            // If user input matches the full text or auto-skip characters
+            if (userInput.value === textToType) {
+                resultDisplay.textContent = 'Correct! Skipping to the next character...';
+                skipButton.click();  // Programmatically trigger skip button click
+            } else if (userInput.value.length > textToType.length) {
+                resultDisplay.innerHTML = `<span style="color: red;">Mistyped! You Typed: ${userInput.value}</span>`;
+                userInput.value = ''; // Clear the input field
+            }
+        }
+
+        userInput.addEventListener('input', checkUserInput); // Check user input on every keystroke
+
+        skipButton.addEventListener('click', () => {
+            updateWordSample(); // Update the sample text
+            userInput.value = ''; // Clear the input field
+            resultDisplay.textContent = ''; // Clear the result display
+        });
+
+        // Initialize the text sample when the page loads
+        updateWordSample();
+        toggleCheckboxes(); // Ensure checkbox visibility is set on page load
+        function handleLanguageChange() {
+            const language = document.getElementById('language-dropdown').value;
+            if (language === 'english') {
+                window.location.href = 'lesson1.html'; // Redirect to Bengali typing page
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Explosion Game</title>
+  <link rel="stylesheet" href="game2.css">
+</head>
+<body>
+  <!-- Background Animation -->
+  <div id="stars"></div>
+  <div id="stars2"></div>
+  <div id="stars3"></div>
+
+  <div id="game-container">
+    <!-- Warning Message -->
+    <p id="keyboard-warning">You Must Be Connect Physical Keyboard</p>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Start Button -->
+    <button id="start-btn" class="start-btn">Start Game</button>
+    <!-- Score and Health -->
+    <div id="score">Score: 0</div>
+    <div id="health">Health: 100</div>
+  </div>
+
+
+
+
+
+
+  <!-- Background Music and Explosion Sound -->
+  <audio id="bg-music" loop>
+    <source src="bg.mp3" type="audio/mp3">
+  </audio>
+  <audio id="explosion-sound">
+    <source src="bomb.mp3" type="audio/mp3">
+  </audio>
+  
+  <div id="game-over-popup">
+  <div class="popup-content">
+    <h2>Game Over!</h2>
+    <p id="final-score">Score: 0</p>
+    <p id="typing-accuracy">Accuracy: 0%</p>
+    <button id="restart-btn" class="restart-btn">Restart</button>
+  </div>
+</div>
+
+  <script src="game2.js"></script>
+</body>
+</html>

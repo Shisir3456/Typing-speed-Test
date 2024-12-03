@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Typing Speed Test </title>
+    <link rel="stylesheet" href="lesson1.css"> <!-- Use relative paths -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <header>
+  <div class="textContent">
+    <p><b>Typing Practice</b></p>
+    <p class="creator"><span>Husain Ahmed</span></p>
+  </div>
+</header>
+
+<style>
+  /* গুগল ফন্ট ইমপোর্ট */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  /* হেডার স্টাইল */
+  header {
+    text-align: center; /* সব কিছু মাঝখানে */
+    padding: 20px; /* কিছুটা জায়গা */
+    font-family: 'Poppins', sans-serif; /* ফন্ট সেটিং */
+  }
+
+  header .textContent p {
+    margin: 5px 0; /* টেক্সটের মাঝে ফাঁকা */
+  }
+
+  header .textContent p b {
+    font-size: 24px; /* টাইটেলের আকার */
+    background: linear-gradient(90deg, #ff7e5f, #feb47b); /* গ্রেডিয়েন্ট রঙ */
+    -webkit-background-clip: text; /* ব্যাকগ্রাউন্ড ক্লিপিং */
+    -webkit-text-fill-color: transparent; /* টেক্সট স্বচ্ছ */
+    font-weight: 600; /* বোল্ড টেক্সট */
+  }
+
+  header .textContent .creator {
+    font-size: 14px; /* ক্রিয়েটরের লেখার আকার */
+    color: #6c63ff; /* নীল রঙ */
+    margin-top: 5px; /* উপরের লেখার সঙ্গে দূরত্ব */
+  }
+
+  header .textContent .creator span {
+    font-weight: bold; /* বোল্ড টেক্সট */
+    background: linear-gradient(90deg, #00c6ff, #0072ff); /* গ্রেডিয়েন্ট রঙ */
+    -webkit-background-clip: text; /* ব্যাকগ্রাউন্ড ক্লিপিং */
+    -webkit-text-fill-color: transparent; /* টেক্সট স্বচ্ছ */
+  }
+</style>
+         
+
+    <p id="text-sample">A</p> <!-- Initial display text will be "A" -->
+    <textarea id="user-input" placeholder="Start typing here..."></textarea>
+
+    <!-- Wrap Skip button and checkboxes in a single div -->
+    <div class="action-container">
+        <button id="skip-button" class="skip-button">Skip</button>
+        <div class="checkboxes">
+            <label>
+                <input type="checkbox" id="learn-checkbox" checked> Learn
+            </label>
+            <label>
+                <input type="checkbox" id="practice-checkbox"> Practice
+            </label>
+        </div>
+
+    </div>
+
+    <aside class="dropdowns">
+        <div class="language-selector">
+            <select id="language-dropdown" onchange="handleLanguageChange()">
+                <option value="english">English</option>
+                <option value="bengali">বাংলা</option>
+            </select>
+            <script>
+                function handleLanguageChange() {
+                    const language = document.getElementById('language-dropdown').value;
+                    if (language === 'bengali') {
+                        window.location.href = 'bntyping.html'; // Redirect to Bengali typing page
+                    }
+                }
+            </script>
+        </div>
+        <div class="level-selector">
+            <select id="level-dropdown">
+                <option value="level1">Level 1</option>
+                <option value="level2">Level 2</option>
+                <option value="level3">Level 3</option>
+                <option value="az">A-Z</option>
+                <option value="word">Word</option>
+                <option value="sentence">Sentence</option>
+            </select>
+        </div>
+    </aside>
+
+    <p id="result"></p>
+
+    <script src="lesson1.js"></script> <!-- Updated path -->
+    <script src="checkboxes.js"></script> <!-- Updated path -->
+    <script>
+        document.getElementById('back-button').addEventListener('click', function () {
+            window.location.href = 'index.html'; // Redirect to home page
+        });
+    </script>
+</body>
+</html>

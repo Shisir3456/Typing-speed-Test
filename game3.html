@@ -1,0 +1,1207 @@
+<html><head><base href="https://websim.example.com/tower-defense-advanced/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Tower Defense Shooter</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+    #gameCanvas {
+        display: block;
+    }
+    #gameOverlay {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: #ffffff;
+        font-size: 18px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    #gameOver, #gamePaused {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 48px;
+        color: #ff0000;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        display: none;
+    }
+    #resetButton, #pauseButton, #shopButton, #shopIButton {
+        position: absolute;
+        font-size: 24px;
+        padding: 10px 20px;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    #resetButton:hover, #pauseButton:hover, #shopButton:hover, #shopIButton:hover {
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+    #resetButton {
+        top: 60%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: none;
+    }
+    #pauseButton {
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+    }
+    #shopButton {
+        top: 60px;
+        right: 10px;
+        font-size: 18px;
+        padding: 5px 10px;
+    }
+    #shopIButton {
+        display: none;
+        position: absolute;
+        top: 110px;
+        right: 10px;
+        font-size: 18px;
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    #healthDisplay {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        font-size: 24px;
+    }
+    #shopOverlay {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+    }
+    #shopOverlay button {
+        margin-top: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    #shopIIOverlay {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+    }
+    #discordButton {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        z-index: 1000;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #7289DA;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    #discordOverlay {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        text-align: center;
+        z-index: 1001;
+    }
+    #closeDiscordButton {
+        margin-top: 10px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="gameOverlay">Score: <span id="scoreDisplay">0</span> | Wave: <span id="waveDisplay">1</span> | Next Wave: <span id="waveTimerDisplay">3</span> | Coins: <span id="coinDisplay">0</span> | Fire Rate: <span id="currentFireRate">4.0</span></div>
+<div id="gameOver">Game Over!</div>
+<div id="gamePaused">Game Paused</div>
+<button id="resetButton">Reset Game</button>
+<button id="pauseButton">Pause</button>
+<button id="shopButton">Shop I</button>
+<button id="shopIButton">Shop II</button>
+<div id="healthDisplay"></div>
+<div id="shopOverlay">
+    <h2>Upgrade Shop</h2>
+    <p>Current Fire Rate: <span id="shopFireRate"></span></p>
+    <p>Current Damage: <span id="shopDamage"></span></p>
+    <p>Critical Chance: <span id="shopCriticalChance">0</span>%</p>
+    <p>Critical Factor: <span id="shopCriticalFactor">1.50</span>x</p>
+    <button id="upgradeFireRateButton">Upgrade Fire Rate (100 coins)</button>
+    <button id="upgradeDamageButton">Upgrade Damage (100 coins)</button>
+    <button id="upgradeCriticalChanceButton">Upgrade Critical Chance (150 coins)</button>
+    <button id="upgradeCriticalFactorButton">Upgrade Critical Factor (200 coins)</button>
+    <button id="closeShopButton">Close</button>
+</div>
+<div id="shopIIOverlay">
+    <h2>Shop II</h2>
+    <p>Multishot Chance: <span id="shopIIMultishotChance">0</span>%</p>
+    <button id="upgradeMultishotButton">Upgrade Multishot Chance (250 coins)</button>
+    <p>Ricochet Chance: <span id="shopIIRicochetChance">0</span>%</p>
+    <button id="upgradeRicochetButton">Upgrade Ricochet Chance (500 coins)</button>
+    <button id="closeShopIIButton">Close</button>
+</div>
+<button id="discordButton">facebook</button>
+<div id="discordOverlay">
+    <p>@mdhusainsd</p>
+    <button id="closeDiscordButton">Close</button>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const gameOverText = document.getElementById('gameOver');
+const gamePausedText = document.getElementById('gamePaused');
+const resetButton = document.getElementById('resetButton');
+const pauseButton = document.getElementById('pauseButton');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const waveDisplay = document.getElementById('waveDisplay');
+const shopButton = document.getElementById('shopButton');
+const shopOverlay = document.getElementById('shopOverlay');
+const shopIIOverlay = document.getElementById('shopIIOverlay');
+const upgradeFireRateButton = document.getElementById('upgradeFireRateButton');
+const closeShopButton = document.getElementById('closeShopButton');
+const closeShopIIButton = document.getElementById('closeShopIIButton');
+const currentFireRateDisplay = document.getElementById('currentFireRate');
+const shopFireRateDisplay = document.getElementById('shopFireRate');
+const shopDamageDisplay = document.getElementById('shopDamage');
+const upgradeDamageButton = document.getElementById('upgradeDamageButton');
+const upgradeCriticalChanceButton = document.getElementById('upgradeCriticalChanceButton');
+const shopIButton = document.getElementById('shopIButton');
+const upgradeMultishotButton = document.getElementById('upgradeMultishotButton');
+const shopMultishotChanceDisplay = document.getElementById('shopIIMultishotChance');
+const upgradeRicochetButton = document.getElementById('upgradeRicochetButton');
+const shopRicochetChanceDisplay = document.getElementById('shopIIRicochetChance');
+
+let fireRatePrice = 100;
+let damagePrice = 100;
+let criticalChancePrice = 150;
+let criticalFactorPrice = 200;
+let multishotChance = 0;
+let multishotPrice = 250;
+let ricochetChance = 0;
+let ricochetPrice = 500;
+
+const TURRET_BASE_RADIUS = 25;
+const TURRET_TOP_RADIUS = 15;
+const TURRET_BARREL_LENGTH = 30;
+const TURRET_BARREL_WIDTH = 8;
+
+let criticalFactor = 1.5;
+let damageCounters = [];
+let enemyHealthMultiplier = 1;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+let tower, enemies, bullets, particles, mouseX, mouseY, gameRunning, gamePaused, score;
+let coins = 0;
+let health;
+const maxHealth = 5;
+let lastFireTime = 0;
+let fireRate = 4;
+let damage = 1;
+let wasGamePausedBeforeShop = false;
+let criticalChance = 0;
+
+let baseSpawnInterval = 1000; // 1 second
+let spawnInterval = baseSpawnInterval;
+
+let currentWave = 1;
+let enemiesInWave = 0;
+let totalEnemiesInWave = 10;
+let waveComplete = false;
+let lastSpawnTime = 0;
+
+let waveTimer = 3000; // 3 seconds between waves
+let nextWaveTime = 0;
+let shopOpen = false;
+let shopIIOpen = false;
+let bossSpawned = false;
+let postBossPhase = false;
+
+function createSpaceBackground() {
+    const stars = [];
+    for (let i = 0; i < 200; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5,
+            speed: Math.random() * 0.5 + 0.1 // Speed between 0.1 and 0.6
+        });
+    }
+    return stars;
+}
+
+function updateStars(stars) {
+    stars.forEach(star => {
+        star.x -= star.speed;
+        if (star.x < 0) {
+            star.x = canvas.width;
+            star.y = Math.random() * canvas.height;
+        }
+    });
+}
+
+function drawBackground() {
+    ctx.fillStyle = '#000033';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = 'white';
+    stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+function createExplosionParticle(x, y) {
+    return {
+        x: x,
+        y: y,
+        radius: Math.random() * 3 + 2,
+        color: `hsl(${Math.random() * 60 + 15}, 100%, 50%)`,
+        velocity: {
+            x: (Math.random() - 0.5) * 8,
+            y: (Math.random() - 0.5) * 8
+        },
+        alpha: 1,
+        isExplosion: true
+    };
+}
+
+function getRandomCorner() {
+    const corners = [
+        { x: 0, y: 0 },
+        { x: canvas.width, y: 0 },
+        { x: 0, y: canvas.height },
+        { x: canvas.width, y: canvas.height }
+    ];
+    return corners[Math.floor(Math.random() * corners.length)];
+}
+
+function createEnemyTexture(ctx, color, type) {
+    const textureCanvas = document.createElement('canvas');
+    textureCanvas.width = 40;
+    textureCanvas.height = 40;
+    const textureCtx = textureCanvas.getContext('2d');
+
+    if (type === 'normal') {
+        const gradient = textureCtx.createRadialGradient(20, 20, 0, 20, 20, 20);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(1, shadeColor(color, -30));
+        textureCtx.fillStyle = gradient;
+        textureCtx.fillRect(0, 0, 40, 40);
+    } else if (type === 'fast') {
+        textureCtx.fillStyle = color;
+        textureCtx.fillRect(0, 0, 40, 40);
+        textureCtx.strokeStyle = shadeColor(color, 50);
+        textureCtx.lineWidth = 2;
+        for (let i = 0; i < 40; i += 4) {
+            textureCtx.beginPath();
+            textureCtx.moveTo(i, 0);
+            textureCtx.lineTo(i, 40);
+            textureCtx.stroke();
+        }
+    } else if (type === 'tank') {
+        textureCtx.fillStyle = color;
+        textureCtx.fillRect(0, 0, 40, 40);
+        textureCtx.fillStyle = shadeColor(color, -30);
+        for (let i = 0; i < 40; i += 8) {
+            for (let j = 0; j < 40; j += 8) {
+                if ((i + j) % 16 === 0) {
+                    textureCtx.fillRect(i, j, 4, 4);
+                }
+            }
+        }
+    } else if (type === 'boss') {
+        const gradient = textureCtx.createLinearGradient(0, 0, 40, 40);
+        gradient.addColorStop(0, color);
+        gradient.addColorStop(0.5, shadeColor(color, 30));
+        gradient.addColorStop(1, color);
+        textureCtx.fillStyle = gradient;
+        textureCtx.fillRect(0, 0, 40, 40);
+        textureCtx.strokeStyle = shadeColor(color, 50);
+        textureCtx.lineWidth = 2;
+        textureCtx.beginPath();
+        textureCtx.moveTo(0, 20);
+        textureCtx.lineTo(40, 20);
+        textureCtx.moveTo(20, 0);
+        textureCtx.lineTo(20, 40);
+        textureCtx.stroke();
+    }
+
+    return textureCanvas;
+}
+
+function shadeColor(color, percent) {
+    const num = parseInt(color.replace("#",""), 16),
+    amt = Math.round(2.55 * percent),
+    R = (num >> 16) + amt,
+    G = (num >> 8 & 0x00FF) + amt,
+    B = (num & 0x0000FF) + amt;
+    return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
+}
+
+function initGame() {
+    tower = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 30,
+        color: '#4A90E2',
+        turretLength: 20,
+        turretWidth: 10
+    };
+
+    enemies = [];
+    bullets = [];
+    particles = [];
+    mouseX = 0;
+    mouseY = 0;
+    gameRunning = true;
+    gamePaused = false;
+    score = 0;
+    coins = 0;
+
+    health = maxHealth;
+    updateHealthDisplay();
+
+    currentWave = 1;
+    enemiesInWave = 0;
+    totalEnemiesInWave = 10;
+    waveComplete = false;
+    
+    fireRate = 4; // Reset fire rate to 4
+    damage = 1; // Reset damage to 1
+    criticalChance = 0; // Reset critical chance
+    criticalFactor = 1.5; // Reset critical factor
+    multishotChance = 0; // Reset multishot chance
+    ricochetChance = 0; // Reset ricochet chance
+    currentFireRateDisplay.textContent = fireRate.toFixed(1);
+    shopDamageDisplay.textContent = damage; // Display initial damage
+    document.getElementById('shopCriticalChance').textContent = criticalChance; // Initialize shop critical chance display
+    document.getElementById('shopCriticalFactor').textContent = criticalFactor.toFixed(2); // Initialize shop critical factor display
+    shopMultishotChanceDisplay.textContent = multishotChance; // Initialize shop multishot chance display
+    shopRicochetChanceDisplay.textContent = ricochetChance; // Initialize shop ricochet chance display
+
+    enemyHealthMultiplier = 1; // Reset the enemy health multiplier
+
+    gameOverText.style.display = 'none';
+    gamePausedText.style.display = 'none';
+    resetButton.style.display = 'none';
+    pauseButton.textContent = 'Pause';
+    updateScore();
+    updateCoinDisplay();
+    updateWaveDisplay();
+
+    stars = createSpaceBackground();
+    nextWaveTime = Date.now() + waveTimer;
+    spawnInterval = baseSpawnInterval;
+
+    fireRatePrice = 100;
+    damagePrice = 100;
+    criticalChancePrice = 150;
+    criticalFactorPrice = 200;
+    multishotPrice = 250;
+    ricochetPrice = 500;
+
+    upgradeFireRateButton.textContent = `Upgrade Fire Rate (${fireRatePrice} coins)`;
+    upgradeDamageButton.textContent = `Upgrade Damage (${damagePrice} coins)`;
+    upgradeCriticalChanceButton.textContent = `Upgrade Critical Chance (${criticalChancePrice} coins)`;
+    upgradeCriticalFactorButton.textContent = `Upgrade Critical Factor (${criticalFactorPrice} coins)`;
+    document.getElementById('discordOverlay').style.display = 'none';
+
+    document.getElementById('shopIButton').style.display = 'none';
+}
+
+function updateHealthDisplay() {
+    const healthDisplay = document.getElementById('healthDisplay');
+    healthDisplay.innerHTML = '❤️'.repeat(health);
+}
+
+function updateScore() {
+    scoreDisplay.textContent = score;
+}
+
+function updateCoinDisplay() {
+    document.getElementById('coinDisplay').textContent = coins;
+}
+
+function updateWaveDisplay() {
+    waveDisplay.textContent = currentWave;
+}
+
+function updateShopIIButtonVisibility() {
+    const shopIIButton = document.getElementById('shopIButton');
+    if (currentWave >= 10) {
+        shopIIButton.style.display = 'block';
+    } else {
+        shopIIButton.style.display = 'none';
+    }
+}
+
+function updateWaveTimerDisplay() {
+    const waveTimerDisplay = document.getElementById('waveTimerDisplay');
+    if (waveComplete) {
+        const timeLeft = Math.max(0, ((nextWaveTime - Date.now()) / 1000).toFixed(1));
+        waveTimerDisplay.textContent = timeLeft;
+    } else {
+        waveTimerDisplay.textContent = "In Progress";
+    }
+}
+
+function drawTower() {
+    ctx.beginPath();
+    ctx.arc(tower.x, tower.y, tower.radius, 0, Math.PI * 2);
+    ctx.fillStyle = tower.color;
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.beginPath();
+    ctx.arc(tower.x, tower.y, tower.radius * 0.7, 0, Math.PI * 2);
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    ctx.closePath();
+
+    const angle = Math.atan2(mouseY - tower.y, mouseX - tower.x);
+
+    ctx.save();
+    ctx.translate(tower.x, tower.y);
+    ctx.rotate(angle);
+    ctx.fillStyle = '#2C3E50';
+    ctx.beginPath();
+    ctx.arc(0, 0, TURRET_BASE_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.fillStyle = '#34495E';
+    ctx.beginPath();
+    ctx.arc(0, 0, TURRET_TOP_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.fillStyle = '#7F8C8D';
+    ctx.fillRect(0, -TURRET_BARREL_WIDTH / 2, TURRET_BARREL_LENGTH, TURRET_BARREL_WIDTH);
+
+    ctx.strokeStyle = '#BDC3C7';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(5, -TURRET_BARREL_WIDTH / 2);
+    ctx.lineTo(5, TURRET_BARREL_WIDTH / 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(15, -TURRET_BARREL_WIDTH / 2);
+    ctx.lineTo(15, TURRET_BARREL_WIDTH / 2);
+    ctx.stroke();
+
+    ctx.restore();
+}
+
+function drawEnemies() {
+    enemies.forEach(enemy => {
+        ctx.save();
+        ctx.translate(enemy.x, enemy.y);
+
+        // Draw enemy body with texture
+        ctx.beginPath();
+        ctx.arc(0, 0, enemy.radius, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(enemy.texture, -enemy.radius, -enemy.radius, enemy.radius * 2, enemy.radius * 2);
+        ctx.restore();
+
+        // Draw health bar
+        const healthBarWidth = enemy.isBoss ? enemy.radius * 3 : enemy.radius * 2;
+        const healthBarHeight = enemy.isBoss ? 8 : 5;
+        const healthBarY = enemy.y + enemy.radius + 5;
+        ctx.fillStyle = '#FF0000';
+        ctx.fillRect(enemy.x - healthBarWidth / 2, healthBarY, healthBarWidth, healthBarHeight);
+        ctx.fillStyle = '#2ECC71';
+        ctx.fillRect(enemy.x - healthBarWidth / 2, healthBarY, healthBarWidth * (enemy.health / enemy.maxHealth), healthBarHeight);
+
+        // Draw eyes or crown
+        if (enemy.isBoss) {
+            ctx.beginPath();
+            ctx.moveTo(enemy.x - enemy.radius * 0.5, enemy.y - enemy.radius * 1.2);
+            ctx.lineTo(enemy.x + enemy.radius * 0.5, enemy.y - enemy.radius * 1.2);
+            ctx.lineTo(enemy.x, enemy.y - enemy.radius * 1.5);
+            ctx.closePath();
+            ctx.fillStyle = '#F1C40F'; 
+            ctx.fill();
+        } else {
+            const eyeRadius = enemy.radius * 0.2;
+            const eyeOffset = enemy.radius * 0.3;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(enemy.x - eyeOffset, enemy.y - eyeOffset, eyeRadius, 0, Math.PI * 2);
+            ctx.arc(enemy.x + eyeOffset, enemy.y - eyeOffset, eyeRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(enemy.x - eyeOffset, enemy.y - eyeOffset, eyeRadius * 0.5, 0, Math.PI * 2);
+            ctx.arc(enemy.x + eyeOffset, enemy.y - eyeOffset, eyeRadius * 0.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.closePath();
+        }
+    });
+}
+
+function drawBullets() {
+    bullets.forEach(bullet => {
+        ctx.beginPath();
+        ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+        ctx.fillStyle = bullet.color;
+        ctx.fill();
+        ctx.closePath();
+    });
+}
+
+function drawParticles() {
+    particles.forEach(particle => {
+        ctx.save();
+        ctx.globalAlpha = particle.alpha;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.fill();
+        ctx.restore();
+    });
+}
+
+function drawDamageCounters() {
+    ctx.save();
+    damageCounters.forEach((counter, index) => {
+        ctx.globalAlpha = counter.alpha;
+        ctx.fillStyle = counter.color;
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(counter.damage.toFixed(1), counter.x, counter.y);
+        
+        counter.y += counter.speed;
+        counter.alpha -= 0.02;
+        
+        if (counter.alpha <= 0) {
+            damageCounters.splice(index, 1);
+        }
+    });
+    ctx.restore();
+}
+
+function createParticle(x, y, color) {
+    return {
+        x: x,
+        y: y,
+        radius: Math.random() * 3 + 1,
+        color: color,
+        velocity: {
+            x: (Math.random() - 0.5) * 3,
+            y: (Math.random() - 0.5) * 3
+        },
+        alpha: 1
+    };
+}
+
+function updateParticles() {
+    for (let i = particles.length - 1; i >= 0; i--) {
+        let particle = particles[i];
+        particle.x += particle.velocity.x;
+        particle.y += particle.velocity.y;
+        particle.alpha -= particle.isExplosion ? 0.03 : 0.02;
+
+        if (particle.isExplosion) {
+            particle.velocity.x *= 0.95;
+            particle.velocity.y *= 0.95;
+        }
+
+        if (particle.alpha <= 0) {
+            particles.splice(i, 1);
+        }
+    }
+}
+
+function skipWaves() {
+    for (let i = 0; i < 9; i++) {
+        currentWave++;
+        totalEnemiesInWave = Math.floor(totalEnemiesInWave * 1.2);
+    }
+    enemiesInWave = 0;
+    waveComplete = true;
+    nextWaveTime = Date.now();
+    updateWaveDisplay();
+    updateShopIIButtonVisibility();
+    console.log("Skipped 9 waves!");
+}
+
+function startNewWave() {
+    currentWave++;
+    totalEnemiesInWave = Math.floor(totalEnemiesInWave * 1.2);
+    enemiesInWave = 0;
+    waveComplete = false;
+
+    if (currentWave % 10 === 1 && currentWave > 1) {
+        coins += 100;  
+        postBossPhase = true;
+        spawnInterval = baseSpawnInterval;
+        enemyHealthMultiplier *= 10; // Changed multiplier from 5 to 10
+    } else {
+        coins += 20;
+        if (currentWave % 10 === 0) {
+            postBossPhase = false;  
+        } else {
+            spawnInterval = spawnInterval * 0.8;
+        }
+    }
+
+    updateCoinDisplay();
+    updateWaveDisplay();
+    updateShopIIButtonVisibility();
+    nextWaveTime = Date.now() + waveTimer;
+
+    if (currentWave % 10 === 0) {
+        bossSpawned = false;
+    }
+
+    // Clear existing enemies when skipping waves
+    enemies = [];
+}
+
+function spawnEnemy() {
+    if (!gameRunning || gamePaused || waveComplete) return;
+
+    if (enemiesInWave >= totalEnemiesInWave && bossSpawned) {
+        waveComplete = true;
+        return;
+    }
+
+    let x, y;
+
+    if (currentWave % 10 === 0 && !bossSpawned) {
+        const corner = getRandomCorner();
+        x = corner.x;
+        y = corner.y;
+    } else {
+        const side = Math.floor(Math.random() * 4);
+        switch(side) {
+            case 0:
+                x = Math.random() * canvas.width;
+                y = 0;
+                break;
+            case 1:
+                x = canvas.width;
+                y = Math.random() * canvas.height;
+                break;
+            case 2:
+                x = Math.random() * canvas.width;
+                y = canvas.height;
+                break;
+            case 3:
+                x = 0;
+                y = Math.random() * canvas.height;
+                break;
+        }
+    }
+
+    let enemy;
+
+    if (currentWave % 10 === 0 && !bossSpawned) {
+        enemy = {
+            x: x,
+            y: y,
+            radius: 40,
+            color: '#8E44AD',
+            speed: 0.5 + Math.random() * 0.3,
+            health: currentWave >= 20 ? 2000 : 150,
+            maxHealth: currentWave >= 20 ? 2000 : 150,
+            value: 10,
+            coins: 100,
+            isBoss: true,
+            texture: createEnemyTexture(ctx, '#8E44AD', 'boss')
+        };
+        bossSpawned = true;
+        postBossPhase = false;  
+    } else {
+        const enemyType = Math.random();
+        let baseHealth;
+        if (enemyType < 0.7) {
+            baseHealth = 1;
+            enemy = {
+                x: x,
+                y: y,
+                radius: 20,
+                color: '#E74C3C',
+                speed: 1 + Math.random(),
+                value: 1,
+                coins: 2,
+                texture: createEnemyTexture(ctx, '#E74C3C', 'normal')
+            };
+        } else if (enemyType < 0.9) {
+            baseHealth = 1;
+            enemy = {
+                x: x,
+                y: y,
+                radius: 15,
+                color: '#F1C40F',
+                speed: 2 + Math.random(),
+                value: 2,
+                coins: 5,
+                texture: createEnemyTexture(ctx, '#F1C40F', 'fast')
+            };
+        } else {
+            baseHealth = 3;
+            enemy = {
+                x: x,
+                y: y,
+                radius: 25,
+                color: '#27AE60',
+                speed: 0.8 + Math.random() * 0.4,
+                value: 3,
+                coins: 4,
+                texture: createEnemyTexture(ctx, '#27AE60', 'tank')
+            };
+        }
+
+        if (currentWave >= 20 && currentWave < 30) {
+            enemy.coins *= 25;  // 5x coins for waves 20-29 (compared to waves 10-19)
+        } else if (currentWave >= 10 && currentWave < 20) {
+            enemy.coins *= 5;  // 5x coins for waves 10-19 (compared to waves 1-9)
+        }
+
+        baseHealth *= enemyHealthMultiplier; // Apply the health multiplier
+        enemy.health = baseHealth;
+        enemy.maxHealth = baseHealth;
+    }
+
+    enemies.push(enemy);
+    enemiesInWave++;
+}
+
+function moveEnemies() {
+    if (gamePaused) return;
+
+    enemies.forEach((enemy, index) => {
+        const dx = tower.x - enemy.x;
+        const dy = tower.y - enemy.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        enemy.x += (dx / distance) * enemy.speed;
+        enemy.y += (dy / distance) * enemy.speed;
+
+        if (distance < tower.radius + enemy.radius) {
+            enemies.splice(index, 1);
+            if (enemy.isBoss) {
+                health = 0;
+            } else {
+                health--;
+            }
+            updateHealthDisplay();
+
+            for (let i = 0; i < 50; i++) {
+                particles.push(createExplosionParticle(tower.x, tower.y));
+            }
+
+            if (health <= 0) {
+                gameOver();
+            }
+        }
+    });
+}
+
+function moveBullets() {
+    if (gamePaused) return;
+
+    bullets.forEach((bullet, index) => {
+        bullet.x += bullet.dx;
+        bullet.y += bullet.dy;
+
+        if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+            bullets.splice(index, 1);
+        }
+    });
+}
+
+function checkCollisions() {
+    if (gamePaused) return;
+
+    bullets.forEach((bullet, bulletIndex) => {
+        enemies.forEach((enemy, enemyIndex) => {
+            const dx = bullet.x - enemy.x;
+            const dy = bullet.y - enemy.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < bullet.radius + enemy.radius) {
+                enemy.health -= bullet.damage; 
+
+                damageCounters.push({
+                    x: enemy.x,
+                    y: enemy.y - enemy.radius - 20,
+                    damage: bullet.damage,
+                    color: bullet.isCritical ? '#FFD700' : '#FFFFFF',
+                    alpha: 1,
+                    speed: -1
+                });
+
+                if (enemy.health <= 0) {
+                    for (let i = 0; i < 15; i++) {
+                        particles.push(createParticle(enemy.x, enemy.y, enemy.color));
+                    }
+                    enemies.splice(enemyIndex, 1);
+                    score += enemy.value;
+                    coins += enemy.isBoss ? 100 : enemy.coins;
+                    updateScore();
+                    updateCoinDisplay();
+
+                    if (enemy.isBoss && health < maxHealth) {
+                        health++;
+                        updateHealthDisplay();
+                    }
+                }
+
+                if (bullet.canRicochet && Math.random() < (ricochetChance / 100)) {
+                    // Ricochet the bullet
+                    const angle = Math.random() * Math.PI * 2;
+                    bullet.dx = Math.cos(angle) * 5;
+                    bullet.dy = Math.sin(angle) * 5;
+                    bullet.canRicochet = false; // Prevent multiple ricochets
+                } else {
+                    bullets.splice(bulletIndex, 1);
+                }
+            }
+        });
+    });
+}
+
+function shoot() {
+    if (!gameRunning || gamePaused) return;
+
+    const currentTime = Date.now();
+    if (currentTime - lastFireTime < 1000 / fireRate) return;
+
+    lastFireTime = currentTime;
+
+    const dx = mouseX - tower.x;
+    const dy = mouseY - tower.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    const isCritical = Math.random() < (criticalChance / 100);
+    const bulletDamage = isCritical ? damage * criticalFactor : damage;
+
+    const isMultishot = Math.random() < (multishotChance / 100);
+    const bulletCount = isMultishot ? 3 : 1;
+
+    for (let i = 0; i < bulletCount; i++) {
+        let angle = Math.atan2(dy, dx);
+        if (isMultishot) {
+            angle += (Math.random() - 0.5) * Math.PI / 6; // Spread multishot bullets
+        }
+        const bulletDx = Math.cos(angle) * 5;
+        const bulletDy = Math.sin(angle) * 5;
+
+        bullets.push({
+            x: tower.x,
+            y: tower.y,
+            radius: 5,
+            color: isCritical ? '#FFD700' : '#F39C12',
+            dx: bulletDx,
+            dy: bulletDy,
+            damage: bulletDamage,
+            isCritical: isCritical,
+            canRicochet: true // Add this line
+        });
+    }
+}
+
+function gameOver() {
+    gameRunning = false;
+    gameOverText.style.display = 'block';
+    resetButton.style.display = 'block';
+    health = 0;
+    updateHealthDisplay();
+}
+
+function togglePause() {
+    if (shopOpen || shopIIOpen || document.getElementById('discordOverlay').style.display !== 'none') return;
+    gamePaused = !gamePaused;
+    if (gamePaused) {
+        pauseButton.textContent = 'Resume';
+        gamePausedText.style.display = 'block';
+    } else {
+        pauseButton.textContent = 'Pause';
+        gamePausedText.style.display = 'none';
+        gameLoop();
+    }
+}
+
+function toggleShop() {
+    shopOpen = !shopOpen;
+    shopOverlay.style.display = shopOpen ? 'block' : 'none';
+    if (shopOpen) {
+        wasGamePausedBeforeShop = gamePaused;
+        gamePaused = true;
+        pauseButton.textContent = 'Resume';
+        shopFireRateDisplay.textContent = fireRate.toFixed(1);
+        shopDamageDisplay.textContent = damage; 
+        document.getElementById('shopCriticalChance').textContent = criticalChance;
+        document.getElementById('shopCriticalFactor').textContent = criticalFactor.toFixed(2);
+    } else {
+        gamePaused = wasGamePausedBeforeShop;
+        pauseButton.textContent = gamePaused ? 'Resume' : 'Pause';
+        if (!gamePaused) {
+            gameLoop();
+        }
+    }
+}
+
+function toggleShopII() {
+    shopIIOpen = !shopIIOpen;
+    shopIIOverlay.style.display = shopIIOpen ? 'block' : 'none';
+    if (shopIIOpen) {
+        wasGamePausedBeforeShop = gamePaused;
+        gamePaused = true;
+        pauseButton.textContent = 'Resume';
+        document.getElementById('shopIIMultishotChance').textContent = multishotChance;
+        document.getElementById('shopIIRicochetChance').textContent = ricochetChance;
+    } else {
+        gamePaused = wasGamePausedBeforeShop;
+        pauseButton.textContent = gamePaused ? 'Resume' : 'Pause';
+        if (!gamePaused) {
+            gameLoop();
+        }
+    }
+}
+
+function upgradeFireRate() {
+    if (coins >= fireRatePrice) {
+        coins -= fireRatePrice;
+        fireRate += 0.5;
+        fireRatePrice = Math.round(fireRatePrice * 1.1);
+        updateCoinDisplay();
+        currentFireRateDisplay.textContent = fireRate.toFixed(1);
+        shopFireRateDisplay.textContent = fireRate.toFixed(1);
+        upgradeFireRateButton.textContent = `Upgrade Fire Rate (${fireRatePrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+upgradeFireRateButton.addEventListener('click', upgradeFireRate);
+
+function upgradeDamage() {
+    if (coins >= damagePrice) {
+        coins -= damagePrice;
+        damage += 1;
+        damagePrice = Math.round(damagePrice * 1.05);
+        updateCoinDisplay();
+        shopDamageDisplay.textContent = damage; 
+        upgradeDamageButton.textContent = `Upgrade Damage (${damagePrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+function upgradeCriticalChance() {
+    if (coins >= criticalChancePrice) {
+        coins -= criticalChancePrice;
+        criticalChance += 5;
+        criticalChancePrice = Math.round(criticalChancePrice * 1.2);
+        updateCoinDisplay();
+        document.getElementById('shopCriticalChance').textContent = criticalChance;
+        upgradeCriticalChanceButton.textContent = `Upgrade Critical Chance (${criticalChancePrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+function upgradeCriticalFactor() {
+    if (coins >= criticalFactorPrice) {
+        coins -= criticalFactorPrice;
+        criticalFactor += 0.2;
+        criticalFactorPrice = Math.round(criticalFactorPrice * 1.15);
+        updateCoinDisplay();
+        document.getElementById('shopCriticalFactor').textContent = criticalFactor.toFixed(2);
+        upgradeCriticalFactorButton.textContent = `Upgrade Critical Factor (${criticalFactorPrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+upgradeDamageButton.addEventListener('click', upgradeDamage);
+upgradeCriticalChanceButton.addEventListener('click', upgradeCriticalChance);
+document.getElementById('upgradeCriticalFactorButton').addEventListener('click', upgradeCriticalFactor);
+
+function upgradeMultishot() {
+    if (coins >= multishotPrice) {
+        coins -= multishotPrice;
+        multishotChance += 3;
+        multishotPrice = Math.round(multishotPrice * 1.3);
+        updateCoinDisplay();
+        shopMultishotChanceDisplay.textContent = multishotChance;
+        upgradeMultishotButton.textContent = `Upgrade Multishot Chance (${multishotPrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+upgradeMultishotButton.addEventListener('click', upgradeMultishot);
+
+function upgradeRicochet() {
+    if (coins >= ricochetPrice) {
+        coins -= ricochetPrice;
+        ricochetChance += 4;
+        ricochetPrice = Math.round(ricochetPrice * 1.2);
+        updateCoinDisplay();
+        shopRicochetChanceDisplay.textContent = ricochetChance;
+        upgradeRicochetButton.textContent = `Upgrade Ricochet Chance (${ricochetPrice} coins)`;
+    } else {
+        alert("Not enough coins!");
+    }
+}
+
+upgradeRicochetButton.addEventListener('click', upgradeRicochet);
+
+function gameLoop() {
+    if (!gameRunning || gamePaused) return;
+
+    const currentTime = Date.now();
+    if (currentTime - lastSpawnTime > spawnInterval && enemiesInWave < totalEnemiesInWave) {
+        spawnEnemy();
+        lastSpawnTime = currentTime;
+    }
+
+    if (enemies.length === 0 && enemiesInWave >= totalEnemiesInWave) {
+        waveComplete = true;
+    }
+
+    if (waveComplete && currentTime >= nextWaveTime) {
+        startNewWave();
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    updateStars(stars);
+    drawBackground();
+    drawTower();
+    drawEnemies();
+    drawBullets();
+    drawParticles();
+    drawDamageCounters();
+
+    moveEnemies();
+    moveBullets();
+    checkCollisions();
+    updateParticles();
+    updateWaveTimerDisplay();
+
+    shoot();
+
+    updateShopIIButtonVisibility();
+
+    requestAnimationFrame(gameLoop);
+}
+
+canvas.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+resetButton.addEventListener('click', () => {
+    initGame();
+    gameLoop();
+});
+
+pauseButton.addEventListener('click', togglePause);
+shopButton.addEventListener('click', toggleShop);
+closeShopButton.addEventListener('click', toggleShop);
+closeShopIIButton.addEventListener('click', toggleShopII);
+
+discordButton.addEventListener('click', toggleDiscordOverlay);
+closeDiscordButton.addEventListener('click', toggleDiscordOverlay);
+
+function openShopII() {
+    if (currentWave >= 10) {
+        toggleShopII();
+    } else {
+        alert("Shop II is only available after wave 10!");
+    }
+}
+
+function handleMKeyPress() {
+    coins += 1000;
+    updateCoinDisplay();
+    console.log("Cheat activated: +1000 coins!");
+}
+
+function handleKeyDown(e) {
+    if (e.code === 'Space') {
+        e.preventDefault(); // Prevent default space bar behavior (like scrolling)
+        togglePause();
+    } else if (e.key.toLowerCase() === 'm') {
+        handleMKeyPress();
+    } else if (e.key.toLowerCase() === 'w') {
+        skipWaves();
+    }
+}
+
+window.addEventListener('keydown', handleKeyDown);
+
+initGame();
+gameLoop();
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    tower.x = canvas.width / 2;
+    tower.y = canvas.height / 2;
+});
+
+// Add this function
+function toggleDiscordOverlay() {
+    const discordOverlay = document.getElementById('discordOverlay');
+    if (discordOverlay.style.display === 'none' || discordOverlay.style.display === '') {
+        discordOverlay.style.display = 'block';
+        gamePaused = true;
+        pauseButton.textContent = 'Resume';
+    } else {
+        discordOverlay.style.display = 'none';
+        gamePaused = false;
+        pauseButton.textContent = 'Pause';
+        gameLoop();
+    }
+}
+</script>
+
+</body></html>

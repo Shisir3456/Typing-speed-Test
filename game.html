@@ -1,0 +1,1474 @@
+<html><head><base href="https://websim.io/"><title>Neumorphic Interactive Experiences</title><style>
+:root {
+  --primary-color: #6200ee;
+  --secondary-color: #03dac6;
+  --background-color: #e0e5ec;
+  --surface-color: #e0e5ec;
+  --on-surface-color: #1d1d1d;
+  --on-primary-color: #ffffff;
+  --neumorphic-light: #ffffff;
+  --neumorphic-dark: #a3b1c6;
+}
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--background-color);
+  color: var(--on-surface-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  transition: background-color 0.3s, color 0.3s;
+  overflow: hidden;
+}
+.container {
+  background-color: var(--surface-color);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 
+    10px 10px 20px var(--neumorphic-dark),
+    -10px -10px 20px var(--neumorphic-light);
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  position: relative;
+}
+.loading-container, .sound-maker-container, .meditation-container, .color-mixer-container, .memory-game-container, .gesture-drawer-container, .math-quiz-container, .rhythm-game-container, .word-scramble-container, .pattern-matching-container, .reaction-test-container, .piano-container {
+  width: 300px;
+  height: 300px;
+  margin: 20px auto;
+  position: relative;
+  touch-action: none;
+}
+.loading-bar {
+  width: 300px;
+  height: 20px;
+  background-color: var(--surface-color);
+  border-radius: 10px;
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  transform-origin: center;
+  box-shadow:
+    inset 2px 2px 5px var(--neumorphic-dark),
+    inset -2px -2px 5px var(--neumorphic-light);
+}
+.progress-bar {
+  width: 0;
+  height: 100%;
+  background-color: var(--primary-color);
+  transition: width 0.1s linear;
+  box-shadow: 
+    2px 2px 5px var(--neumorphic-dark),
+    -2px -2px 5px var(--neumorphic-light);
+}
+.loading-circle {
+  width: 80px;
+  height: 80px;
+  border: 8px solid var(--surface-color);
+  border-top: 8px solid var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1s linear infinite;
+  display: none;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.loading-dots {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.dot {
+  width: 16px;
+  height: 16px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 8px;
+  animation: bounce 1.4s infinite ease-in-out;
+  box-shadow: 
+    2px 2px 5px var(--neumorphic-dark),
+    -2px -2px 5px var(--neumorphic-light);
+}
+.dot:nth-child(1) { animation-delay: -0.32s; }
+.dot:nth-child(2) { animation-delay: -0.16s; }
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+button {
+  margin: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: var(--surface-color);
+  color: var(--on-surface-color);
+  border: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+button:hover {
+  box-shadow: 
+    2px 2px 5px var(--neumorphic-dark),
+    -2px -2px 5px var(--neumorphic-light);
+}
+button:active {
+  box-shadow: 
+    inset 2px 2px 5px var(--neumorphic-dark),
+    inset -2px -2px 5px var(--neumorphic-light);
+}
+.info-boxes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+.info-box {
+  background-color: var(--surface-color);
+  border-radius: 15px;
+  padding: 20px;
+  width: 45%;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+  margin: 0 20px;
+}
+.info-box h3 {
+  margin-top: 0;
+  color: var(--primary-color);
+}
+.icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+.dark-mode-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--surface-color);
+  color: var(--on-surface-color);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.dark-mode-toggle:hover {
+  box-shadow: 
+    2px 2px 5px var(--neumorphic-dark),
+    -2px -2px 5px var(--neumorphic-light);
+}
+.dark-mode-toggle:active {
+  box-shadow: 
+    inset 2px 2px 5px var(--neumorphic-dark),
+    inset -2px -2px 5px var(--neumorphic-light);
+}
+body.dark-mode {
+  --background-color: #1a1a1a;
+  --surface-color: #2a2a2a;
+  --on-surface-color: #ffffff;
+  --neumorphic-light: #3a3a3a;
+  --neumorphic-dark: #151515;
+}
+.arrow {
+  position: absolute;
+  top: 50%;
+  font-size: 24px;
+  background-color: var(--surface-color);
+  color: var(--on-surface-color);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.arrow:hover {
+  box-shadow: 
+    2px 2px 5px var(--neumorphic-dark),
+    -2px -2px 5px var(--neumorphic-light);
+}
+.arrow:active {
+  box-shadow: 
+    inset 2px 2px 5px var(--neumorphic-dark),
+    inset -2px -2px 5px var(--neumorphic-light);
+}
+.arrow-left {
+  left: -25px;
+}
+.arrow-right {
+  right: -25px;
+}
+.sound-maker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.sound-button {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.spill {
+  position: absolute;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
+.record-button {
+  background-color: #ff4136;
+  color: white;
+}
+.record-button.recording {
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 65, 54, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 65, 54, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 65, 54, 0);
+  }
+}
+.meditation-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: var(--surface-color);
+  position: relative;
+  margin: 50px auto;
+  animation: breathe 8s infinite ease-in-out;
+  box-shadow: 
+    10px 10px 20px var(--neumorphic-dark),
+    -10px -10px 20px var(--neumorphic-light);
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+.meditation-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  text-align: center;
+}
+.color-mixer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.color-sliders {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.color-slider {
+  width: 30%;
+}
+.color-preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 20px 0;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.memory-card {
+  width: 60px;
+  height: 60px;
+  background-color: var(--surface-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.memory-card.flipped {
+  background-color: var(--primary-color);
+  color: var(--on-primary-color);
+  transform: rotateY(180deg);
+}
+.gesture-canvas {
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.math-quiz-question {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.math-quiz-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.rhythm-game-note {
+  width: 50px;
+  height: 50px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  top: -50px;
+  animation: fallDown 3s linear;
+}
+@keyframes fallDown {
+  0% { top: -50px; }
+  100% { top: 300px; }
+}
+.word-scramble-word {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.pattern-matching-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.pattern-matching-cell {
+  width: 80px;
+  height: 80px;
+  background-color: var(--surface-color);
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.reaction-test-target {
+  width: 100px;
+  height: 100px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    5px 5px 10px var(--neumorphic-dark),
+    -5px -5px 10px var(--neumorphic-light);
+}
+.piano-container {
+  background: var(--surface-color);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 
+    10px 10px 20px var(--neumorphic-dark),
+    -10px -10px 20px var(--neumorphic-light);
+}
+
+.piano-keys {
+  height: 200px;
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.piano-key {
+  position: absolute;
+  width: 8%;
+  height: 100%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  background: white;
+  transition: background-color 0.1s;
+}
+
+.piano-key.black {
+  background: #333;
+  height: 60%;
+  width: 6%;
+  z-index: 2;
+  margin-left: -3%;
+}
+
+.piano-key.active {
+  background-color: #e0e0e0;
+}
+
+.piano-key.black.active {
+  background-color: #666;
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head><body>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()">
+  <i class="fas fa-moon"></i>
+</button>
+<div class="container">
+  <button class="arrow arrow-left" onclick="switchMode('prev')">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button class="arrow arrow-right" onclick="switchMode('next')">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+  <h1 id="modeTitle">Neumorphic Interactive Loading Animations</h1>
+  <div id="loadingContainer" class="loading-container">
+    <div class="loading-bar" id="loadingBar">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+    <div class="loading-circle" id="loadingCircle"></div>
+    <div class="loading-dots" id="loadingDots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </div>
+  <div id="soundMakerContainer" class="sound-maker-container" style="display:none;">
+    <div class="sound-maker">
+      <button class="sound-button" onclick="playSound('C4')">C4</button>
+      <button class="sound-button" onclick="playSound('D4')">D4</button>
+      <button class="sound-button" onclick="playSound('E4')">E4</button>
+      <button class="sound-button" onclick="playSound('F4')">F4</button>
+      <button class="sound-button" onclick="playSound('G4')">G4</button>
+      <button class="sound-button" onclick="playSound('A4')">A4</button>
+      <button class="sound-button" onclick="playSound('B4')">B4</button>
+      <button class="sound-button" onclick="playSound('C5')">C5</button>
+    </div>
+    <div class="record-controls">
+      <button id="recordButton" class="record-button" onclick="toggleRecording()">Record</button>
+      <button onclick="playRecording()">Play Recording</button>
+    </div>
+  </div>
+  <div id="meditationContainer" class="meditation-container" style="display:none;">
+    <div class="meditation-circle">
+      <div class="meditation-text">Breathe In... Breathe Out...</div>
+    </div>
+    <button onclick="toggleMeditation()">Start/Stop</button>
+  </div>
+  <div id="colorMixerContainer" class="color-mixer-container" style="display:none;">
+    <div class="color-mixer">
+      <div class="color-sliders">
+        <input type="range" min="0" max="255" value="128" class="color-slider" id="redSlider" oninput="updateColor()">
+        <input type="range" min="0" max="255" value="128" class="color-slider" id="greenSlider" oninput="updateColor()">
+        <input type="range" min="0" max="255" value="128" class="color-slider" id="blueSlider" oninput="updateColor()">
+      </div>
+      <div class="color-preview" id="colorPreview"></div>
+      <p id="colorCode">#808080</p>
+    </div>
+  </div>
+  <div id="memoryGameContainer" class="memory-game-container" style="display:none;">
+    <div class="memory-grid" id="memoryGrid"></div>
+    <button onclick="startMemoryGame()">Start New Game</button>
+  </div>
+  <div id="gestureDrawerContainer" class="gesture-drawer-container" style="display:none;">
+    <canvas id="gestureCanvas" class="gesture-canvas" width="300" height="300"></canvas>
+    <button onclick="clearCanvas()">Clear</button>
+  </div>
+  <div id="mathQuizContainer" class="math-quiz-container" style="display:none;">
+    <div class="math-quiz-question" id="mathQuestion"></div>
+    <div class="math-quiz-options" id="mathOptions"></div>
+    <button onclick="nextMathQuestion()">Next Question</button>
+  </div>
+  <div id="rhythmGameContainer" class="rhythm-game-container" style="display:none;">
+    <div id="rhythmGameArea"></div>
+    <button onclick="startRhythmGame()">Start Game</button>
+  </div>
+  <div id="wordScrambleContainer" class="word-scramble-container" style="display:none;">
+    <div class="word-scramble-word" id="scrambledWord"></div>
+    <input type="text" id="wordGuess" placeholder="Enter your guess">
+    <button onclick="checkWordGuess()">Check</button>
+    <button onclick="nextWordScramble()">Next Word</button>
+  </div>
+  <div id="patternMatchingContainer" class="pattern-matching-container" style="display:none;">
+    <div class="pattern-matching-grid" id="patternGrid"></div>
+    <button onclick="startPatternMatching()">Start New Game</button>
+  </div>
+  <div id="reactionTestContainer" class="reaction-test-container" style="display:none;">
+    <div class="reaction-test-target" id="reactionTarget"></div>
+    <button onclick="startReactionTest()">Start Test</button>
+    <p id="reactionTime"></p>
+  </div>
+  <div id="pianoContainer" class="piano-container" style="display:none;">
+    <div class="piano-keys" id="pianoKeys"></div>
+    <button onclick="toggleMetronome()">Toggle Metronome</button>
+    <div class="piano-controls">
+      <input type="range" min="0.1" max="2" step="0.1" value="1" onchange="updateVolume(this.value)">
+      <label>Volume</label>
+    </div>
+  </div>
+  <div id="loadingControls">
+    <button onclick="startLoading()">Start</button>
+    <button onclick="resetLoading()">Reset</button>
+    <button onclick="switchAnimation('bar')">Bar</button>
+    <button onclick="switchAnimation('circle')">Circle</button>
+    <button onclick="switchAnimation('dots')">Dots</button>
+    <button onclick="breakLoadingBar()">Break Bar</button>
+    <p>Progress: <span id="progressText">0%</span></p>
+    <p>Inclination: <span id="inclinationText">0°</span></p>
+  </div>
+  
+  <div class="info-boxes">
+    <div class="info-box">
+      <div class="icon" id="mentalIcon"><i class="fas fa-brain"></i></div>
+      <h3>Mental Effects</h3>
+      <p id="mentalEffects">Enhances focus and reduces stress by providing a visual representation of progress.</p>
+    </div>
+    <div class="info-box">
+      <div class="icon" id="physicalIcon"><i class="fas fa-heartbeat"></i></div>
+      <h3>Physical Effects</h3>
+      <p id="physicalEffects">May lower heart rate and blood pressure by creating a calming visual experience.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+let progress = 0;
+let intervalId = null;
+let inclination = 0;
+let currentAnimation = 'bar';
+let currentMode = 'loading';
+const modes = ['loading', 'sound', 'meditation', 'colorMixer', 'memoryGame', 'gestureDrawer', 'mathQuiz', 'rhythmGame', 'wordScramble', 'patternMatching', 'reactionTest', 'piano'];
+const progressBar = document.getElementById('progressBar');
+const progressText = document.getElementById('progressText');
+const inclinationText = document.getElementById('inclinationText');
+const loadingBar = document.getElementById('loadingBar');
+const loadingCircle = document.getElementById('loadingCircle');
+const loadingDots = document.getElementById('loadingDots');
+const loadingContainer = document.getElementById('loadingContainer');
+const soundMakerContainer = document.getElementById('soundMakerContainer');
+const meditationContainer = document.getElementById('meditationContainer');
+const colorMixerContainer = document.getElementById('colorMixerContainer');
+const memoryGameContainer = document.getElementById('memoryGameContainer');
+const gestureDrawerContainer = document.getElementById('gestureDrawerContainer');
+const mathQuizContainer = document.getElementById('mathQuizContainer');
+const rhythmGameContainer = document.getElementById('rhythmGameContainer');
+const wordScrambleContainer = document.getElementById('wordScrambleContainer');
+const patternMatchingContainer = document.getElementById('patternMatchingContainer');
+const reactionTestContainer = document.getElementById('reactionTestContainer');
+const loadingControls = document.getElementById('loadingControls');
+const modeTitle = document.getElementById('modeTitle');
+const mentalEffects = document.getElementById('mentalEffects');
+const physicalEffects = document.getElementById('physicalEffects');
+const mentalIcon = document.getElementById('mentalIcon');
+const physicalIcon = document.getElementById('physicalIcon');
+const pianoContainer = document.getElementById('pianoContainer');
+
+function startLoading() {
+  if (intervalId === null) {
+    intervalId = setInterval(updateLoading, 50);
+  }
+}
+
+function updateLoading() {
+  if (progress < 100 && progress >= 0) {
+    let speed = 1 + Math.abs(inclination) / 10;
+    progress += inclination > 0 ? speed : -speed;
+    updateProgress();
+  } else {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+}
+
+function updateProgress() {
+  progress = Math.max(0, Math.min(progress, 100));
+  progressBar.style.width = `${progress}%`;
+  progressText.textContent = `${Math.round(progress)}%`;
+}
+
+function resetLoading() {
+  clearInterval(intervalId);
+  intervalId = null;
+  progress = 0;
+  inclination = 0;
+  updateProgress();
+  loadingBar.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+  inclinationText.textContent = '0°';
+}
+
+function switchAnimation(type) {
+  currentAnimation = type;
+  loadingBar.style.display = 'none';
+  loadingCircle.style.display = 'none';
+  loadingDots.style.display = 'none';
+  
+  switch(type) {
+    case 'bar':
+      loadingBar.style.display = 'block';
+      break;
+    case 'circle':
+      loadingCircle.style.display = 'block';
+      break;
+    case 'dots':
+      loadingDots.style.display = 'block';
+      break;
+  }
+  updateEffects();
+}
+
+let isDragging = false;
+let startY;
+
+loadingContainer.addEventListener('mousedown', startDrag);
+loadingContainer.addEventListener('touchstart', startDrag);
+
+document.addEventListener('mousemove', drag);
+document.addEventListener('touchmove', drag);
+
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('touchend', endDrag);
+
+function startDrag(e) {
+  if (currentAnimation !== 'bar') return;
+  isDragging = true;
+  startY = e.clientY || e.touches[0].clientY;
+}
+
+function drag(e) {
+  if (!isDragging || currentAnimation !== 'bar') return;
+  
+  const currentY = e.clientY || e.touches[0].clientY;
+  const deltaY = startY - currentY;
+  inclination = Math.max(-45, Math.min(45, deltaY / 3));
+  
+  loadingBar.style.transform = `translate(-50%, -50%) rotate(${inclination}deg)`;
+  inclinationText.textContent = `${Math.round(inclination)}°`;
+  
+  e.preventDefault();
+}
+
+function endDrag() {
+  isDragging = false;
+}
+
+function toggleDarkMode() {
+  document.body.classList.toggle('dark-mode');
+  const darkModeToggle = document.querySelector('.dark-mode-toggle i');
+  if (document.body.classList.contains('dark-mode')) {
+    darkModeToggle.classList.remove('fa-moon');
+    darkModeToggle.classList.add('fa-sun');
+  } else {
+    darkModeToggle.classList.remove('fa-sun');
+    darkModeToggle.classList.add('fa-moon');
+  }
+}
+
+function switchMode(direction) {
+  const currentIndex = modes.indexOf(currentMode);
+  let newIndex;
+  if (direction === 'next') {
+    newIndex = (currentIndex + 1) % modes.length;
+  } else {
+    newIndex = (currentIndex - 1 + modes.length) % modes.length;
+  }
+  currentMode = modes[newIndex];
+  
+  loadingContainer.style.display = 'none';
+  soundMakerContainer.style.display = 'none';
+  meditationContainer.style.display = 'none';
+  colorMixerContainer.style.display = 'none';
+  memoryGameContainer.style.display = 'none';
+  gestureDrawerContainer.style.display = 'none';
+  mathQuizContainer.style.display = 'none';
+  rhythmGameContainer.style.display = 'none';
+  wordScrambleContainer.style.display = 'none';
+  patternMatchingContainer.style.display = 'none';
+  reactionTestContainer.style.display = 'none';
+  loadingControls.style.display = 'none';
+  pianoContainer.style.display = 'none';
+  
+  switch(currentMode) {
+    case 'loading':
+      loadingContainer.style.display = 'block';
+      loadingControls.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Interactive Loading Animations';
+      break;
+    case 'sound':
+      soundMakerContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Sound Maker';
+      break;
+    case 'meditation':
+      meditationContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Meditation Guide';
+      break;
+    case 'colorMixer':
+      colorMixerContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Color Mixer';
+      break;
+    case 'memoryGame':
+      memoryGameContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Memory Game';
+      startMemoryGame();
+      break;
+    case 'gestureDrawer':
+      gestureDrawerContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Gesture Drawer';
+      initGestureDrawer();
+      break;
+    case 'mathQuiz':
+      mathQuizContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Math Quiz';
+      startMathQuiz();
+      break;
+    case 'rhythmGame':
+      rhythmGameContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Rhythm Game';
+      break;
+    case 'wordScramble':
+      wordScrambleContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Word Scramble';
+      startWordScramble();
+      break;
+    case 'patternMatching':
+      patternMatchingContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Pattern Matching';
+      startPatternMatching();
+      break;
+    case 'reactionTest':
+      reactionTestContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Reaction Test';
+      break;
+    case 'piano':
+      pianoContainer.style.display = 'block';
+      modeTitle.textContent = 'Neumorphic Piano';
+      mentalIcon.innerHTML = '<i class="fas fa-music"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-sparkles"></i>';
+      mentalEffects.textContent = "Enhances musical cognition and creativity";
+      physicalEffects.textContent = "Improves finger dexterity and hand coordination";
+      initPiano();
+      break;
+  }
+  updateEffects();
+}
+
+function updateEffects() {
+  switch(currentMode) {
+    case 'loading':
+      mentalIcon.innerHTML = '<i class="fas fa-brain"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-heartbeat"></i>';
+      switch(currentAnimation) {
+        case 'bar':
+          mentalEffects.textContent = "Improves patience and goal-setting by visualizing progress.";
+          physicalEffects.textContent = "May reduce muscle tension as users visually track progress.";
+          break;
+        case 'circle':
+          mentalEffects.textContent = "Enhances mindfulness and present-moment awareness through circular motion.";
+          physicalEffects.textContent = "Can lower blood pressure by inducing a meditative state.";
+          break;
+        case 'dots':
+          mentalEffects.textContent = "Boosts pattern recognition and rhythmic thinking.";physicalEffects.textContent = "May synchronize breathing patterns with the dot animation.";
+          break;
+      }
+      break;
+    case 'sound':
+      mentalIcon.innerHTML = '<i class="fas fa-music"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-sparkles"></i>';
+      mentalEffects.textContent = "Stimulates creativity and improves mood through musical engagement.";
+      physicalEffects.textContent = "Can reduce cortisol levels and enhance immune function through music therapy.";
+      break;
+    case 'meditation':
+      mentalIcon.innerHTML = '<i class="fas fa-om"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-wind"></i>';
+      mentalEffects.textContent = "Reduces stress, anxiety, and enhances emotional regulation.";
+      physicalEffects.textContent = "Lowers blood pressure, improves sleep quality, and boosts immune system.";
+      break;
+    case 'colorMixer':
+      mentalIcon.innerHTML = '<i class="fas fa-palette"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-eye"></i>';
+      mentalEffects.textContent = "Enhances color perception and stimulates creative thinking.";
+      physicalEffects.textContent = "May improve visual acuity and reduce eye strain through color exploration.";
+      break;
+    case 'memoryGame':
+      mentalIcon.innerHTML = '<i class="fas fa-memory"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-point-up"></i>';
+      mentalEffects.textContent = "Boosts short-term memory and improves concentration.";
+      physicalEffects.textContent = "Enhances hand-eye coordination and reaction time.";
+      break;
+    case 'gestureDrawer':
+      mentalIcon.innerHTML = '<i class="fas fa-paint-brush"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-paper"></i>';
+      mentalEffects.textContent = "Improves spatial awareness and hand-eye coordination.";
+      physicalEffects.textContent = "Enhances fine motor skills and can serve as a form of art therapy.";
+      break;
+    case 'mathQuiz':
+      mentalIcon.innerHTML = '<i class="fas fa-calculator"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-brain"></i>';
+      mentalEffects.textContent = "Sharpens numerical skills and enhances problem-solving abilities.";
+      physicalEffects.textContent = "May lower stress levels through cognitive engagement and achievement.";
+      break;
+    case 'rhythmGame':
+      mentalIcon.innerHTML = '<i class="fas fa-drum"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-running"></i>';
+      mentalEffects.textContent = "Improves timing perception and enhances multitasking abilities.";
+      physicalEffects.textContent = "Boosts hand-eye coordination and can improve overall physical rhythm.";
+      break;
+    case 'wordScramble':
+      mentalIcon.innerHTML = '<i class="fas fa-language"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-book-reader"></i>';
+      mentalEffects.textContent = "Enhances vocabulary and improves cognitive flexibility.";
+      physicalEffects.textContent = "May reduce risk of cognitive decline by keeping the mind active.";
+      break;
+    case 'patternMatching':
+      mentalIcon.innerHTML = '<i class="fas fa-puzzle-piece"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-eye"></i>';
+      mentalEffects.textContent = "Improves visual processing and enhances pattern recognition skills.";
+      physicalEffects.textContent = "Can help maintain cognitive function and potentially delay age-related decline.";
+      break;
+    case 'reactionTest':
+      mentalIcon.innerHTML = '<i class="fas fa-bolt"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-point-up"></i>';
+      mentalEffects.textContent = "Improves focus and enhances decision-making speed.";
+      physicalEffects.textContent = "May improve overall reflexes and coordination in daily activities.";
+      break;
+    case 'piano':
+      mentalIcon.innerHTML = '<i class="fas fa-music"></i>';
+      physicalIcon.innerHTML = '<i class="fas fa-hand-sparkles"></i>';
+      mentalEffects.textContent = "Enhances musical cognition and creativity.";
+      physicalEffects.textContent = "Improves finger dexterity and hand coordination.";
+      break;
+  }
+}
+
+function breakLoadingBar() {
+  if (currentAnimation !== 'bar') return;
+
+  // Create cracks effect
+  const cracks = document.createElement('div');
+  cracks.style.position = 'absolute';
+  cracks.style.top = '0';
+  cracks.style.left = '0';
+  cracks.style.width = '100%';
+  cracks.style.height = '100%';
+  cracks.style.background = 'radial-gradient(circle at center, transparent 0%, transparent 80%, #000 100%)';
+  cracks.style.opacity = '0.5';
+  loadingBar.appendChild(cracks);
+
+  // Spill effect
+  setTimeout(() => {
+    loadingBar.removeChild(cracks);
+    const spillAmount = 20 + Math.random() * 30;
+    for (let i = 0; i < spillAmount; i++) {
+      const spill = document.createElement('div');
+      spill.className = 'spill';
+      const size = 5 + Math.random() * 15;
+      spill.style.width = `${size}px`;
+      spill.style.height = `${size}px`;
+      spill.style.left = `${loadingBar.offsetLeft + loadingBar.offsetWidth * Math.random()}px`;
+      spill.style.top = `${loadingBar.offsetTop + loadingBar.offsetHeight}px`;
+      document.body.appendChild(spill);
+
+      // Animate spill
+      setTimeout(() => {
+        const destY = window.innerHeight + size;
+        const destX = spill.offsetLeft + (Math.random() - 0.5) * 200;
+        spill.style.transform = `translate(${destX - spill.offsetLeft}px, ${destY}px)`;
+        spill.style.opacity = '0';
+      }, 50);
+
+      // Remove spill element after animation
+      setTimeout(() => {
+        document.body.removeChild(spill);
+      }, 1000);
+    }
+
+    // Reset loading bar
+    resetLoading();
+  }, 300);
+}
+
+// Sound Maker
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let isRecording = false;
+let recordedNotes = [];
+let recordStartTime;
+
+function playSound(note) {
+  const oscillator = audioContext.createOscillator();
+  const gainNode = audioContext.createGain();
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+  
+  const freq = noteToFreq(note);
+  oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+  
+  gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+  gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.5);
+  
+  oscillator.start();
+  oscillator.stop(audioContext.currentTime + 0.5);
+  
+  if (isRecording) {
+    recordedNotes.push({ note, time: Date.now() - recordStartTime });
+  }
+}
+
+function noteToFreq(note) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const octave = parseInt(note.slice(-1));
+  const semitone = notes.indexOf(note.slice(0, -1));
+  return 440 * Math.pow(2, (octave - 4 + (semitone - 9) / 12));
+}
+
+function toggleRecording() {
+  const recordButton = document.getElementById('recordButton');
+  if (isRecording) {
+    isRecording = false;
+    recordButton.textContent = 'Record';
+    recordButton.classList.remove('recording');
+  } else {
+    isRecording = true;
+    recordedNotes = [];
+    recordStartTime = Date.now();
+    recordButton.textContent = 'Stop Recording';
+    recordButton.classList.add('recording');
+  }
+}
+
+function playRecording() {
+  if (recordedNotes.length === 0) {
+    alert('No recording available. Please record something first.');
+    return;
+  }
+  
+  recordedNotes.forEach(noteInfo => {
+    setTimeout(() => {
+      playSound(noteInfo.note);
+    }, noteInfo.time);
+  });
+}
+
+// Meditation
+let meditationInterval;
+
+function toggleMeditation() {
+  if (meditationInterval) {
+    clearInterval(meditationInterval);
+    meditationInterval = null;
+    document.querySelector('.meditation-text').textContent = 'Breathe In... Breathe Out...';
+  } else {
+    let inhale = true;
+    meditationInterval = setInterval(() => {
+      document.querySelector('.meditation-text').textContent = inhale ? 'Breathe In...' : 'Breathe Out...';
+      inhale = !inhale;
+    }, 4000);
+  }
+}
+
+// Color Mixer
+function updateColor() {
+  const red = document.getElementById('redSlider').value;
+  const green = document.getElementById('greenSlider').value;
+  const blue = document.getElementById('blueSlider').value;
+  const colorPreview = document.getElementById('colorPreview');
+  const colorCode = document.getElementById('colorCode');
+  
+  const color = `rgb(${red}, ${green}, ${blue})`;
+  colorPreview.style.backgroundColor = color;
+  colorCode.textContent = rgbToHex(red, green, blue);
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + ((1 << 24) + (parseInt(r) << 16) + (parseInt(g) << 8) + parseInt(b)).toString(16).slice(1);
+}
+
+// Memory Game
+let memoryCards = [];
+let flippedCards = [];
+let matchedPairs = 0;
+
+function startMemoryGame() {
+  const memoryGrid = document.getElementById('memoryGrid');
+  memoryGrid.innerHTML = '';
+  memoryCards = [];
+  flippedCards = [];
+  matchedPairs = 0;
+
+  const emojis = ['🌟', '🌈', '🌺', '🌴', '🌞', '🍉', '🍓', '🍇'];
+  const shuffledEmojis = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
+
+  shuffledEmojis.forEach((emoji, index) => {
+    const card = document.createElement('div');
+    card.className = 'memory-card';
+    card.dataset.value = emoji;
+    card.onclick = () => flipCard(card);
+    memoryGrid.appendChild(card);
+    memoryCards.push(card);
+  });
+}
+
+function flipCard(card) {
+  if (flippedCards.length < 2 && !flippedCards.includes(card) && !card.classList.contains('flipped')) {
+    card.textContent = card.dataset.value;
+    card.classList.add('flipped');
+    flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+      setTimeout(checkMatch, 500);
+    }
+  }
+}
+
+function checkMatch() {
+  const [card1, card2] = flippedCards;
+  if (card1.dataset.value === card2.dataset.value) {
+    matchedPairs++;
+    if (matchedPairs === memoryCards.length / 2) {
+      alert('Congratulations! You won the game!');
+    }
+  } else {
+    card1.textContent = '';
+    card2.textContent = '';
+    card1.classList.remove('flipped');
+    card2.classList.remove('flipped');
+  }
+  flippedCards = [];
+}
+
+// Gesture Drawer
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function initGestureDrawer() {
+  const canvas = document.getElementById('gestureCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+
+  canvas.addEventListener('touchstart', startDrawing);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDrawing);
+
+  function startDrawing(e) {
+    isDrawing = true;
+    [lastX, lastY] = getCoordinates(e);
+  }
+
+  function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const [x, y] = getCoordinates(e);
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    [lastX, lastY] = [x, y];
+  }
+
+  function stopDrawing() {
+    isDrawing = false;
+  }
+
+  function getCoordinates(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    return [x, y];
+  }
+}
+
+function clearCanvas() {
+  const canvas = document.getElementById('gestureCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Math Quiz
+let currentQuestion;
+
+function generateMathQuestion() {
+  const operations = ['+', '-', '*'];
+  const operation = operations[Math.floor(Math.random() * operations.length)];
+  let num1, num2;
+
+  switch (operation) {
+    case '+':
+      num1 = Math.floor(Math.random() * 50) + 1;
+      num2 = Math.floor(Math.random() * 50) + 1;
+      break;
+    case '-':
+      num1 = Math.floor(Math.random() * 50) + 26;
+      num2 = Math.floor(Math.random() * 25) + 1;
+      break;
+    case '*':
+      num1 = Math.floor(Math.random() * 12) + 1;
+      num2 = Math.floor(Math.random() * 12) + 1;
+      break;
+  }
+
+  const question = `${num1} ${operation} ${num2}`;
+  const answer = eval(question);
+
+  return { question, answer };
+}
+
+function startMathQuiz() {
+  currentQuestion = generateMathQuestion();
+  document.getElementById('mathQuestion').textContent = currentQuestion.question;
+  
+  const options = [currentQuestion.answer];
+  while (options.length < 4) {
+    const wrongAnswer = currentQuestion.answer + Math.floor(Math.random() * 10) - 5;
+    if (!options.includes(wrongAnswer)) {
+      options.push(wrongAnswer);
+    }
+  }
+  options.sort(() => Math.random() - 0.5);
+
+  const optionsContainer = document.getElementById('mathOptions');
+  optionsContainer.innerHTML = '';
+  options.forEach(option => {
+    const button = document.createElement('button');
+    button.textContent = option;
+    button.onclick = () => checkMathAnswer(option);
+    optionsContainer.appendChild(button);
+  });
+}
+
+function checkMathAnswer(selectedAnswer) {
+  if (selectedAnswer === currentQuestion.answer) {
+    alert('Correct!');
+  } else {
+    alert(`Incorrect. The correct answer is ${currentQuestion.answer}.`);
+  }
+  nextMathQuestion();
+}
+
+function nextMathQuestion() {
+  startMathQuiz();
+}
+
+// Rhythm Game
+let rhythmNotes = [];
+let rhythmScore = 0;
+
+function startRhythmGame() {
+  rhythmScore = 0;
+  document.getElementById('rhythmGameArea').innerHTML = '';
+  generateRhythmNote();
+}
+
+function generateRhythmNote() {
+  const note = document.createElement('div');
+  note.className = 'rhythm-game-note';
+  note.style.left = `${Math.random() * 250}px`;
+  document.getElementById('rhythmGameArea').appendChild(note);
+
+  note.addEventListener('click', () => hitNote(note));
+
+  setTimeout(() => {
+    if (document.getElementById('rhythmGameArea').contains(note)) {
+      document.getElementById('rhythmGameArea').removeChild(note);
+      missNote();
+    }
+  }, 3000);
+
+  if (rhythmScore < 10) {
+    setTimeout(generateRhythmNote, 2000);
+  } else {
+    alert(`Game Over! Your score: ${rhythmScore}`);
+  }
+}
+
+function hitNote(note) {
+  document.getElementById('rhythmGameArea').removeChild(note);
+  rhythmScore++;
+}
+
+function missNote() {
+  rhythmScore = Math.max(0, rhythmScore - 1);
+}
+
+// Word Scramble
+const words = ['javascript', 'python', 'react', 'angular', 'vue', 'nodejs', 'express', 'mongodb', 'mysql', 'postgresql'];
+let currentWord;
+
+function startWordScramble() {
+  currentWord = words[Math.floor(Math.random() * words.length)];
+  const scrambledWord = scrambleWord(currentWord);
+  document.getElementById('scrambledWord').textContent = scrambledWord;
+}
+
+function scrambleWord(word) {
+  return word.split('').sort(() => Math.random() - 0.5).join('');
+}
+
+function checkWordGuess() {
+  const guess = document.getElementById('wordGuess').value.toLowerCase();
+  if (guess === currentWord) {
+    alert('Correct!');
+    nextWordScramble();
+  } else {
+    alert('Incorrect. Try again!');
+  }
+}
+
+function nextWordScramble() {
+  document.getElementById('wordGuess').value = '';
+  startWordScramble();
+}
+
+// Pattern Matching
+let patternSequence = [];
+let userSequence = [];
+
+function startPatternMatching() {
+  patternSequence = [];
+  userSequence = [];
+  addToPattern();
+}
+
+function addToPattern() {
+  const colors = ['red', 'blue', 'green', 'yellow'];
+  patternSequence.push(colors[Math.floor(Math.random() * colors.length)]);
+  showPattern();
+}
+
+function showPattern() {
+  const patternGrid = document.getElementById('patternGrid');
+  patternGrid.innerHTML = '';
+  patternSequence.forEach((color, index) => {
+    setTimeout(() => {
+      const cell = document.createElement('div');
+      cell.className = 'pattern-matching-cell';
+      cell.style.backgroundColor = color;
+      patternGrid.appendChild(cell);
+      setTimeout(() => {
+        cell.style.backgroundColor = '';
+      }, 500);
+    }, index * 1000);
+  });
+  setTimeout(() => {
+    patternGrid.innerHTML = '';
+    createUserGrid();
+  }, patternSequence.length * 1000 + 500);
+}
+
+function createUserGrid() {
+  const patternGrid = document.getElementById('patternGrid');
+  const colors = ['red', 'blue', 'green', 'yellow'];
+  colors.forEach(color => {
+    const cell = document.createElement('div');
+    cell.className = 'pattern-matching-cell';
+    cell.style.backgroundColor = color;
+    cell.onclick = () => userClick(color);
+    patternGrid.appendChild(cell);
+  });
+}
+
+function userClick(color) {
+  userSequence.push(color);
+  if (userSequence.length === patternSequence.length) {
+    checkPattern();
+  }
+}
+
+function checkPattern() {
+  if (JSON.stringify(userSequence) === JSON.stringify(patternSequence)) {
+    alert('Correct!');
+    userSequence = [];
+    addToPattern();
+  } else {
+    alert(`Game Over! Your score: ${patternSequence.length - 1}`);
+    startPatternMatching();
+  }
+}
+
+// Reaction Test
+let startTime, endTime;
+let reactionTarget = document.getElementById('reactionTarget');
+
+function startReactionTest() {
+  reactionTarget.style.display = 'none';
+  const delay = Math.random() * 3000 + 1000; // Random delay between 1-4 seconds
+  setTimeout(showTarget, delay);
+}
+
+function showTarget() {
+  reactionTarget.style.top = `${Math.random() * 250}px`;
+  reactionTarget.style.left = `${Math.random() * 250}px`;
+  reactionTarget.style.display = 'block';
+  startTime = new Date().getTime();
+}
+
+reactionTarget.addEventListener('click', function() {
+  endTime = new Date().getTime();
+  const reactionTime = endTime - startTime;
+  document.getElementById('reactionTime').textContent = `Your reaction time: ${reactionTime}ms`;
+  reactionTarget.style.display = 'none';
+});
+
+// Piano implementation
+let audioCtx = null;
+let pianoGain = null;
+let metronome = null;
+let isMetronomeOn = false;
+
+function initPiano() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    pianoGain = audioCtx.createGain();
+    pianoGain.connect(audioCtx.destination);
+    pianoGain.gain.value = 0.5; // Set default volume
+  }
+  
+  const pianoKeys = document.getElementById('pianoKeys');
+  pianoKeys.innerHTML = ''; // Clear existing keys
+  
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const octave = 4;
+  
+  notes.forEach((note, index) => {
+    const key = document.createElement('div');
+    key.className = `piano-key ${note.includes('#') ? 'black' : 'white'}`;
+    key.dataset.note = note + octave;
+    key.style.left = `${index * (100 / notes.length)}%`;
+    
+    // Add both mouse and touch events
+    key.addEventListener('mousedown', () => playPianoNote(note + octave));
+    key.addEventListener('mouseup', () => stopPianoNote(note + octave));
+    key.addEventListener('mouseleave', () => stopPianoNote(note + octave));
+    key.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      playPianoNote(note + octave);
+    });
+    key.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      stopPianoNote(note + octave);
+    });
+    
+    pianoKeys.appendChild(key);
+  });
+}
+
+let activeOscillators = {};
+
+function playPianoNote(note) {
+  const freq = getPianoNoteFreq(note);
+  const oscillator = audioCtx.createOscillator();
+  const noteGain = audioCtx.createGain();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  
+  noteGain.gain.setValueAtTime(pianoGain.gain.value, audioCtx.currentTime);
+  oscillator.connect(noteGain);
+  noteGain.connect(audioCtx.destination);
+  
+  oscillator.start();
+  activeOscillators[note] = { oscillator, gain: noteGain };
+  
+  // Visual feedback
+  const key = document.querySelector(`[data-note="${note}"]`);
+  if (key) key.classList.add('active');
+}
+
+
+function getPianoNoteFreq(note) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const octave = parseInt(note.slice(-1));
+  const semitone = notes.indexOf(note.slice(0, -1));
+  return 440 * Math.pow(2, (octave - 4 + (semitone - 9) / 12));
+}
+
+function updateVolume(value) {
+  if (pianoGain) {
+    pianoGain.gain.value = value;
+  }
+}
+
+function toggleMetronome() {
+  if (!metronome) {
+    metronome = setInterval(() => {
+      const tick = audioCtx.createOscillator();
+      tick.frequency.value = 1000;
+      tick.connect(pianoGain);
+      tick.start();
+      tick.stop(audioCtx.currentTime + 0.1);
+    }, 500);
+    isMetronomeOn = true;
+  } else {
+    clearInterval(metronome);
+    metronome = null;
+    isMetronomeOn = false;
+  }
+}
+
+function stopPianoNote(note) {
+  if (activeOscillators[note]) {
+    const { oscillator, gain } = activeOscillators[note];
+    
+    // Fade out to avoid clicks
+    gain.gain.setValueAtTime(gain.gain.value, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+    oscillator.stop(audioCtx.currentTime + 0.03);
+    
+    delete activeOscillators[note];
+    
+    // Remove visual feedback
+    const key = document.querySelector(`[data-note="${note}"]`);
+    if (key) key.classList.remove('active');
+  }
+}
+
+// Initialize the first mode
+switchMode('next');
+
+</script>
+</body></html>
